@@ -1,0 +1,1449 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Haren P. Pandya | Space Portfolio</title>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <style>
+      :root {
+        --dark-bg: #0a0a1a;
+        --dark-card: #12122e;
+        --dark-text: #e0e0ff;
+        --dark-accent: #4a4aff;
+        --dark-secondary: #ff4a9e;
+        --light-bg: #f0f2ff;
+        --light-card: #ffffff;
+        --light-text: #1a1a3a;
+        --light-accent: #4a4aff;
+        --light-secondary: #ff4a9e;
+        --transition: all 0.3s ease;
+      }
+
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+      }
+
+      body {
+        background-color: var(--dark-bg);
+        color: var(--dark-text);
+        transition: var(--transition);
+        overflow-x: hidden;
+        position: relative;
+      }
+
+      body.light-mode {
+        background-color: var(--light-bg);
+        color: var(--light-text);
+      }
+
+      /* Starry Background */
+      #stars-container {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: -1;
+        overflow: hidden;
+      }
+
+      .star {
+        position: absolute;
+        background-color: white;
+        border-radius: 50%;
+        animation: twinkle 5s infinite;
+      }
+
+      @keyframes twinkle {
+        0%,
+        100% {
+          opacity: 0.2;
+        }
+        50% {
+          opacity: 1;
+        }
+      }
+
+      /* Nebula and Planets */
+      .nebula {
+        position: absolute;
+        border-radius: 50%;
+        filter: blur(60px);
+        opacity: 0.3;
+        z-index: -1;
+      }
+
+      .planet {
+        position: absolute;
+        border-radius: 50%;
+        z-index: -1;
+      }
+
+      .comet {
+        position: absolute;
+        width: 4px;
+        height: 4px;
+        background: linear-gradient(45deg, var(--dark-accent), transparent);
+        border-radius: 50%;
+        filter: blur(1px);
+        z-index: -1;
+      }
+
+      /* Header and Navigation */
+      header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 1.5rem 5%;
+        background-color: rgba(10, 10, 26, 0.8);
+        backdrop-filter: blur(10px);
+        position: fixed;
+        width: 100%;
+        z-index: 1000;
+        transition: var(--transition);
+      }
+
+      body.light-mode header {
+        background-color: rgba(240, 242, 255, 0.8);
+      }
+
+      .logo {
+        font-size: 1.8rem;
+        font-weight: 700;
+        background: linear-gradient(
+          90deg,
+          var(--dark-accent),
+          var(--dark-secondary)
+        );
+        -webkit-background-clip: text;
+        background-clip: text;
+        color: transparent;
+      }
+
+      nav ul {
+        display: flex;
+        list-style: none;
+      }
+
+      nav ul li {
+        margin-left: 2rem;
+      }
+
+      nav ul li a {
+        color: var(--dark-text);
+        text-decoration: none;
+        font-weight: 500;
+        transition: var(--transition);
+        position: relative;
+      }
+
+      body.light-mode nav ul li a {
+        color: var(--light-text);
+      }
+
+      nav ul li a:hover {
+        color: var(--dark-accent);
+      }
+
+      nav ul li a::after {
+        content: "";
+        position: absolute;
+        bottom: -5px;
+        left: 0;
+        width: 0;
+        height: 2px;
+        background-color: var(--dark-accent);
+        transition: var(--transition);
+      }
+
+      nav ul li a:hover::after {
+        width: 100%;
+      }
+
+      .theme-toggle {
+        background: none;
+        border: none;
+        color: var(--dark-text);
+        font-size: 1.5rem;
+        cursor: pointer;
+        transition: var(--transition);
+      }
+
+      body.light-mode .theme-toggle {
+        color: var(--light-text);
+      }
+
+      /* Hero Section */
+      .hero {
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+        padding: 0 5%;
+        position: relative;
+      }
+
+      .hero h1 {
+        font-size: 3.5rem;
+        margin-bottom: 1rem;
+        background: linear-gradient(
+          90deg,
+          var(--dark-accent),
+          var(--dark-secondary)
+        );
+        -webkit-background-clip: text;
+        background-clip: text;
+        color: transparent;
+      }
+
+      body.light-mode .hero h1 {
+        background: linear-gradient(
+          90deg,
+          var(--light-accent),
+          var(--light-secondary)
+        );
+        -webkit-background-clip: text;
+        background-clip: text;
+      }
+
+      .hero p {
+        font-size: 1.5rem;
+        max-width: 800px;
+        margin-bottom: 2rem;
+      }
+
+      .typewriter {
+        display: inline-block;
+        position: relative;
+      }
+
+      .typewriter::after {
+        content: "|";
+        position: absolute;
+        right: -8px;
+        animation: blink 1s infinite;
+      }
+
+      @keyframes blink {
+        0%,
+        50% {
+          opacity: 1;
+        }
+        51%,
+        100% {
+          opacity: 0;
+        }
+      }
+
+      .btn {
+        display: inline-block;
+        padding: 0.8rem 2rem;
+        background: linear-gradient(
+          90deg,
+          var(--dark-accent),
+          var(--dark-secondary)
+        );
+        color: white;
+        border: none;
+        border-radius: 30px;
+        font-size: 1rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: var(--transition);
+        text-decoration: none;
+        margin: 0.5rem;
+      }
+
+      .btn:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 20px rgba(74, 74, 255, 0.3);
+      }
+
+      /* Skills Section */
+      section {
+        padding: 5rem 5%;
+      }
+
+      .section-title {
+        text-align: center;
+        font-size: 2.5rem;
+        margin-bottom: 3rem;
+        position: relative;
+      }
+
+      .section-title::after {
+        content: "";
+        position: absolute;
+        bottom: -10px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 100px;
+        height: 4px;
+        background: linear-gradient(
+          90deg,
+          var(--dark-accent),
+          var(--dark-secondary)
+        );
+        border-radius: 2px;
+      }
+
+      body.light-mode .section-title::after {
+        background: linear-gradient(
+          90deg,
+          var(--light-accent),
+          var(--light-secondary)
+        );
+      }
+
+      .skills-container {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 2rem;
+      }
+
+      .skill-card {
+        width: 150px;
+        height: 150px;
+        border-radius: 50%;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        background-color: var(--dark-card);
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+        transition: var(--transition);
+        position: relative;
+        overflow: hidden;
+      }
+
+      body.light-mode .skill-card {
+        background-color: var(--light-card);
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+      }
+
+      .skill-card:hover {
+        transform: scale(1.1);
+        box-shadow: 0 15px 30px rgba(74, 74, 255, 0.3);
+      }
+
+      .skill-card i {
+        font-size: 3rem;
+        margin-bottom: 0.5rem;
+        color: var(--dark-accent);
+      }
+
+      body.light-mode .skill-card i {
+        color: var(--light-accent);
+      }
+
+      .skill-card span {
+        font-weight: 600;
+      }
+
+      .skill-card::before {
+        content: "";
+        position: absolute;
+        top: -50%;
+        left: -50%;
+        width: 200%;
+        height: 200%;
+        background: conic-gradient(
+          transparent,
+          var(--dark-accent),
+          transparent 30%
+        );
+        animation: rotate 8s linear infinite;
+        z-index: -1;
+      }
+
+      @keyframes rotate {
+        0% {
+          transform: rotate(0deg);
+        }
+        100% {
+          transform: rotate(360deg);
+        }
+      }
+
+      /* Projects Section */
+      .projects-container {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+        gap: 2rem;
+      }
+
+      .project-card {
+        background-color: var(--dark-card);
+        border-radius: 15px;
+        overflow: hidden;
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+        transition: var(--transition);
+      }
+
+      body.light-mode .project-card {
+        background-color: var(--light-card);
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+      }
+
+      .project-card:hover {
+        transform: translateY(-10px);
+        box-shadow: 0 15px 30px rgba(74, 74, 255, 0.3);
+      }
+
+      .project-img {
+        height: 200px;
+        background-size: cover;
+        background-position: center;
+      }
+
+      .project-content {
+        padding: 1.5rem;
+      }
+
+      .project-title {
+        font-size: 1.5rem;
+        margin-bottom: 0.5rem;
+        color: var(--dark-accent);
+      }
+
+      body.light-mode .project-title {
+        color: var(--light-accent);
+      }
+
+      .project-description {
+        margin-bottom: 1rem;
+      }
+
+      .project-tags {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+      }
+
+      .project-tag {
+        background-color: rgba(74, 74, 255, 0.2);
+        color: var(--dark-accent);
+        padding: 0.3rem 0.8rem;
+        border-radius: 20px;
+        font-size: 0.8rem;
+      }
+
+      body.light-mode .project-tag {
+        background-color: rgba(74, 74, 255, 0.1);
+        color: var(--light-accent);
+      }
+
+      /* Education Section */
+      .timeline {
+        position: relative;
+        max-width: 800px;
+        margin: 0 auto;
+      }
+
+      .timeline::after {
+        content: "";
+        position: absolute;
+        width: 4px;
+        background-color: var(--dark-accent);
+        top: 0;
+        bottom: 0;
+        left: 50%;
+        margin-left: -2px;
+      }
+
+      body.light-mode .timeline::after {
+        background-color: var(--light-accent);
+      }
+
+      .timeline-item {
+        padding: 10px 40px;
+        position: relative;
+        width: 50%;
+        box-sizing: border-box;
+      }
+
+      .timeline-item:nth-child(odd) {
+        left: 0;
+      }
+
+      .timeline-item:nth-child(even) {
+        left: 50%;
+      }
+
+      .timeline-content {
+        padding: 20px;
+        background-color: var(--dark-card);
+        border-radius: 10px;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+      }
+
+      body.light-mode .timeline-content {
+        background-color: var(--light-card);
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+      }
+
+      .timeline-item::after {
+        content: "";
+        position: absolute;
+        width: 20px;
+        height: 20px;
+        background-color: var(--dark-accent);
+        border: 4px solid var(--dark-bg);
+        border-radius: 50%;
+        top: 15px;
+        z-index: 1;
+      }
+
+      body.light-mode .timeline-item::after {
+        background-color: var(--light-accent);
+        border: 4px solid var(--light-bg);
+      }
+
+      .timeline-item:nth-child(odd)::after {
+        right: -10px;
+      }
+
+      .timeline-item:nth-child(even)::after {
+        left: -10px;
+      }
+
+      /* Contact Section */
+      .contact-container {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 2rem;
+        justify-content: center;
+      }
+
+      .contact-info {
+        flex: 1;
+        min-width: 300px;
+      }
+
+      .contact-item {
+        display: flex;
+        align-items: center;
+        margin-bottom: 1.5rem;
+      }
+
+      .contact-item i {
+        font-size: 1.5rem;
+        margin-right: 1rem;
+        color: var(--dark-accent);
+      }
+
+      body.light-mode .contact-item i {
+        color: var(--light-accent);
+      }
+
+      /* Chatbot */
+      .chatbot-container {
+        position: fixed;
+        bottom: 30px;
+        right: 30px;
+        z-index: 1000;
+      }
+
+      .chatbot-toggle {
+        width: 60px;
+        height: 60px;
+        border-radius: 50%;
+        background: linear-gradient(
+          135deg,
+          var(--dark-accent),
+          var(--dark-secondary)
+        );
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        color: white;
+        font-size: 1.5rem;
+        cursor: pointer;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        transition: var(--transition);
+      }
+
+      .chatbot-toggle:hover {
+        transform: scale(1.1);
+      }
+
+      .chatbot-window {
+        position: absolute;
+        bottom: 80px;
+        right: 0;
+        width: 350px;
+        height: 450px;
+        background-color: var(--dark-card);
+        border-radius: 15px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        display: none;
+        flex-direction: column;
+        overflow: hidden;
+      }
+
+      body.light-mode .chatbot-window {
+        background-color: var(--light-card);
+      }
+
+      .chatbot-header {
+        padding: 1rem;
+        background: linear-gradient(
+          90deg,
+          var(--dark-accent),
+          var(--dark-secondary)
+        );
+        color: white;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      .chatbot-body {
+        flex: 1;
+        padding: 1rem;
+        overflow-y: auto;
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+      }
+
+      .chat-message {
+        max-width: 80%;
+        padding: 0.8rem;
+        border-radius: 15px;
+        font-size: 0.9rem;
+      }
+
+      .bot-message {
+        align-self: flex-start;
+        background-color: rgba(74, 74, 255, 0.2);
+        border-bottom-left-radius: 5px;
+      }
+
+      .user-message {
+        align-self: flex-end;
+        background-color: rgba(255, 74, 158, 0.2);
+        border-bottom-right-radius: 5px;
+      }
+
+      .chatbot-footer {
+        padding: 1rem;
+        display: flex;
+        border-top: 1px solid rgba(255, 255, 255, 0.1);
+      }
+
+      body.light-mode .chatbot-footer {
+        border-top: 1px solid rgba(0, 0, 0, 0.1);
+      }
+
+      .chatbot-input {
+        flex: 1;
+        padding: 0.5rem 1rem;
+        border: none;
+        border-radius: 30px;
+        background-color: rgba(255, 255, 255, 0.1);
+        color: var(--dark-text);
+      }
+
+      body.light-mode .chatbot-input {
+        background-color: rgba(0, 0, 0, 0.05);
+        color: var(--light-text);
+      }
+
+      .chatbot-send {
+        background: none;
+        border: none;
+        color: var(--dark-accent);
+        font-size: 1.2rem;
+        cursor: pointer;
+        margin-left: 0.5rem;
+      }
+
+      body.light-mode .chatbot-send {
+        color: var(--light-accent);
+      }
+
+      .quick-options {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+        margin-top: 0.5rem;
+      }
+
+      .quick-option {
+        background-color: rgba(74, 74, 255, 0.2);
+        color: var(--dark-accent);
+        padding: 0.3rem 0.8rem;
+        border-radius: 15px;
+        font-size: 0.8rem;
+        cursor: pointer;
+        transition: var(--transition);
+      }
+
+      body.light-mode .quick-option {
+        background-color: rgba(74, 74, 255, 0.1);
+        color: var(--light-accent);
+      }
+
+      .quick-option:hover {
+        background-color: rgba(74, 74, 255, 0.4);
+      }
+
+      /* Footer */
+      footer {
+        text-align: center;
+        padding: 2rem;
+        background-color: rgba(10, 10, 26, 0.8);
+        margin-top: 3rem;
+      }
+
+      body.light-mode footer {
+        background-color: rgba(240, 242, 255, 0.8);
+      }
+
+      /* Responsive Design */
+      @media (max-width: 768px) {
+        .hero h1 {
+          font-size: 2.5rem;
+        }
+
+        .hero p {
+          font-size: 1.2rem;
+        }
+
+        nav ul {
+          display: none;
+        }
+
+        .timeline::after {
+          left: 31px;
+        }
+
+        .timeline-item {
+          width: 100%;
+          padding-left: 70px;
+          padding-right: 25px;
+        }
+
+        .timeline-item:nth-child(even) {
+          left: 0;
+        }
+
+        .timeline-item::after {
+          left: 21px;
+        }
+
+        .timeline-item:nth-child(odd)::after,
+        .timeline-item:nth-child(even)::after {
+          left: 21px;
+        }
+
+        .chatbot-window {
+          width: 300px;
+          height: 400px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Starry Background -->
+    <div id="stars-container"></div>
+
+    <!-- Header -->
+    <header>
+      <div class="logo">Haren P. Pandya</div>
+      <nav>
+        <ul>
+          <li><a href="#home">Home</a></li>
+          <li><a href="#skills">Skills</a></li>
+          <li><a href="#projects">Projects</a></li>
+          <li><a href="#education">Education</a></li>
+          <li><a href="#contact">Contact</a></li>
+        </ul>
+      </nav>
+      <button class="theme-toggle" id="theme-toggle">
+        <i class="fas fa-moon"></i>
+      </button>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero" id="home">
+      <h1>Haren P. Pandya</h1>
+      <p>Computer Science Student & Innovator</p>
+      <p>I'm a <span class="typewriter" id="typewriter"></span></p>
+      <div>
+        <a href="#projects" class="btn">View My Work</a>
+        <button class="btn" id="download-resume">Download Resume</button>
+      </div>
+    </section>
+
+    <!-- Skills Section -->
+    <section id="skills">
+      <h2 class="section-title">Skills & Technologies</h2>
+      <div class="skills-container">
+        <div class="skill-card">
+          <i class="fab fa-python"></i>
+          <span>Python</span>
+        </div>
+        <div class="skill-card">
+          <i class="fab fa-java"></i>
+          <span>Java</span>
+        </div>
+        <div class="skill-card">
+          <i class="fab fa-js"></i>
+          <span>JavaScript</span>
+        </div>
+        <div class="skill-card">
+          <i class="fas fa-database"></i>
+          <span>SQL</span>
+        </div>
+        <div class="skill-card">
+          <i class="fab fa-cuttlefish"></i>
+          <span>C++</span>
+        </div>
+        <div class="skill-card">
+          <i class="fab fa-react"></i>
+          <span>React</span>
+        </div>
+        <div class="skill-card">
+          <i class="fab fa-node-js"></i>
+          <span>Node.js</span>
+        </div>
+        <div class="skill-card">
+          <i class="fab fa-android"></i>
+          <span>Android</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- Projects Section -->
+    <section id="projects">
+      <h2 class="section-title">Featured Projects</h2>
+      <div class="projects-container">
+        <div class="project-card">
+          <div
+            class="project-img"
+            style="
+              background-image: url('https://images.unsplash.com/photo-1558618047-3c8c76ca7d13?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80');
+            "
+          ></div>
+          <div class="project-content">
+            <h3 class="project-title">Plane Crash Investigation</h3>
+            <p class="project-description">
+              Used Python, Pandas, and NumPy to clean and analyze 5K+ aviation
+              records. Built logistic regression and decision tree models to
+              predict crash severity.
+            </p>
+            <div class="project-tags">
+              <span class="project-tag">Python</span>
+              <span class="project-tag">Data Analysis</span>
+              <span class="project-tag">Machine Learning</span>
+            </div>
+          </div>
+        </div>
+        <div class="project-card">
+          <div
+            class="project-img"
+            style="
+              background-image: url('https://images.unsplash.com/photo-1558618047-3c8c76ca7d13?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80');
+            "
+          ></div>
+          <div class="project-content">
+            <h3 class="project-title">Human Activity Recognition</h3>
+            <p class="project-description">
+              Implemented a CNN-LSTM model with TensorFlow/Keras to classify
+              motion sensor data. Achieved 91% test accuracy.
+            </p>
+            <div class="project-tags">
+              <span class="project-tag">TensorFlow</span>
+              <span class="project-tag">Deep Learning</span>
+              <span class="project-tag">Keras</span>
+            </div>
+          </div>
+        </div>
+        <div class="project-card">
+          <div
+            class="project-img"
+            style="
+              background-image: url('https://images.unsplash.com/photo-1558618047-3c8c76ca7d13?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80');
+            "
+          ></div>
+          <div class="project-content">
+            <h3 class="project-title">Woman Safety Watch</h3>
+            <p class="project-description">
+              Developed a smart wearable using Arduino, GPS, and GSM. Patent
+              granted by Government of India.
+            </p>
+            <div class="project-tags">
+              <span class="project-tag">Arduino</span>
+              <span class="project-tag">IoT</span>
+              <span class="project-tag">Patent</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Education Section -->
+    <section id="education">
+      <h2 class="section-title">Education & Experience</h2>
+      <div class="timeline">
+        <div class="timeline-item">
+          <div class="timeline-content">
+            <h3>Bachelor of Technology in Computer Science</h3>
+            <p>R. N. G. Patel Institute of Technology</p>
+            <p>Aug 2023 – Jun 2026 | Bardoli, Gujarat</p>
+          </div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-content">
+            <h3>Diploma in Computer Engineering</h3>
+            <p>Jayvantrai Harrai Desai Polytechnic</p>
+            <p>Completed 2022 | Palsana, Gujarat</p>
+          </div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-content">
+            <h3>Patent Granted</h3>
+            <p>Woman Safety Watch</p>
+            <p>Government of India | 2024</p>
+          </div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-content">
+            <h3>Innovation Award</h3>
+            <p>Recognized for developing the Woman Safety Watch</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact">
+      <h2 class="section-title">Get In Touch</h2>
+      <div class="contact-container">
+        <div class="contact-info">
+          <div class="contact-item">
+            <i class="fas fa-envelope"></i>
+            <div>
+              <h3>Email</h3>
+              <p>pandyaharen4@gmail.com</p>
+            </div>
+          </div>
+          <div class="contact-item">
+            <i class="fas fa-phone"></i>
+            <div>
+              <h3>Phone</h3>
+              <p>+91-6351102591</p>
+            </div>
+          </div>
+          <div class="contact-item">
+            <i class="fas fa-map-marker-alt"></i>
+            <div>
+              <h3>Location</h3>
+              <p>Surat, Gujarat, India</p>
+            </div>
+          </div>
+          <div class="contact-item">
+            <i class="fab fa-linkedin"></i>
+            <div>
+              <h3>LinkedIn</h3>
+              <p>linkedin.com/in/harenpandya04</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+      <p>&copy; 2023 Haren P. Pandya. All Rights Reserved.</p>
+    </footer>
+
+    <!-- Chatbot -->
+    <div class="chatbot-container">
+      <div class="chatbot-toggle" id="chatbot-toggle">
+        <i class="fas fa-robot"></i>
+      </div>
+      <div class="chatbot-window" id="chatbot-window">
+        <div class="chatbot-header">
+          <h3>CosmoBot</h3>
+          <button id="close-chatbot"><i class="fas fa-times"></i></button>
+        </div>
+        <div class="chatbot-body" id="chatbot-body">
+          <div class="chat-message bot-message">
+            Hello! I'm CosmoBot, your space-themed assistant. How can I help you
+            today?
+          </div>
+          <div class="quick-options">
+            <div class="quick-option" data-option="resume">Download Resume</div>
+            <div class="quick-option" data-option="projects">View Projects</div>
+            <div class="quick-option" data-option="skills">
+              Skills & Technologies
+            </div>
+            <div class="quick-option" data-option="contact">Contact Info</div>
+          </div>
+        </div>
+        <div class="chatbot-footer">
+          <input
+            type="text"
+            class="chatbot-input"
+            id="chatbot-input"
+            placeholder="Type your message..."
+          />
+          <button class="chatbot-send" id="chatbot-send">
+            <i class="fas fa-paper-plane"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      // Theme Toggle
+      const themeToggle = document.getElementById("theme-toggle");
+      const themeIcon = themeToggle.querySelector("i");
+
+      // Check for saved theme preference or default to dark
+      const currentTheme = localStorage.getItem("theme") || "dark";
+      if (currentTheme === "light") {
+        document.body.classList.add("light-mode");
+        themeIcon.classList.remove("fa-moon");
+        themeIcon.classList.add("fa-sun");
+      }
+
+      themeToggle.addEventListener("click", () => {
+        document.body.classList.toggle("light-mode");
+        if (document.body.classList.contains("light-mode")) {
+          localStorage.setItem("theme", "light");
+          themeIcon.classList.remove("fa-moon");
+          themeIcon.classList.add("fa-sun");
+        } else {
+          localStorage.setItem("theme", "dark");
+          themeIcon.classList.remove("fa-sun");
+          themeIcon.classList.add("fa-moon");
+        }
+      });
+
+      // Typewriter Effect
+      const typewriterElement = document.getElementById("typewriter");
+      const messages = [
+        "Software Engineer",
+        "Full-Stack Developer",
+        "AI/ML Enthusiast",
+        "Innovator",
+        "Problem Solver",
+      ];
+      let messageIndex = 0;
+      let charIndex = 0;
+      let isDeleting = false;
+      let typingSpeed = 100;
+
+      function typeWriter() {
+        const currentMessage = messages[messageIndex];
+
+        if (isDeleting) {
+          typewriterElement.textContent = currentMessage.substring(
+            0,
+            charIndex - 1
+          );
+          charIndex--;
+          typingSpeed = 50;
+        } else {
+          typewriterElement.textContent = currentMessage.substring(
+            0,
+            charIndex + 1
+          );
+          charIndex++;
+          typingSpeed = 100;
+        }
+
+        if (!isDeleting && charIndex === currentMessage.length) {
+          isDeleting = true;
+          typingSpeed = 1500; // Pause at end
+        } else if (isDeleting && charIndex === 0) {
+          isDeleting = false;
+          messageIndex = (messageIndex + 1) % messages.length;
+          typingSpeed = 500; // Pause before starting next message
+        }
+
+        setTimeout(typeWriter, typingSpeed);
+      }
+
+      // Start the typewriter effect
+      setTimeout(typeWriter, 1000);
+
+      // Starry Background
+      const starsContainer = document.getElementById("stars-container");
+      const starCount = 200;
+
+      for (let i = 0; i < starCount; i++) {
+        const star = document.createElement("div");
+        star.classList.add("star");
+
+        // Random position
+        const x = Math.random() * 100;
+        const y = Math.random() * 100;
+
+        // Random size
+        const size = Math.random() * 3;
+
+        // Random animation delay
+        const delay = Math.random() * 5;
+
+        star.style.left = `${x}%`;
+        star.style.top = `${y}%`;
+        star.style.width = `${size}px`;
+        star.style.height = `${size}px`;
+        star.style.animationDelay = `${delay}s`;
+
+        starsContainer.appendChild(star);
+      }
+
+      // Nebula Effects
+      function createNebula() {
+        const nebula = document.createElement("div");
+        nebula.classList.add("nebula");
+
+        // Random position
+        const x = Math.random() * 100;
+        const y = Math.random() * 100;
+
+        // Random size
+        const size = 100 + Math.random() * 300;
+
+        // Random color
+        const colors = ["#4a4aff", "#ff4a9e", "#4affd9", "#ffb74a"];
+        const color = colors[Math.floor(Math.random() * colors.length)];
+
+        nebula.style.left = `${x}%`;
+        nebula.style.top = `${y}%`;
+        nebula.style.width = `${size}px`;
+        nebula.style.height = `${size}px`;
+        nebula.style.backgroundColor = color;
+
+        document.body.appendChild(nebula);
+      }
+
+      // Create multiple nebulae
+      for (let i = 0; i < 5; i++) {
+        createNebula();
+      }
+
+      // Planets
+      function createPlanet() {
+        const planet = document.createElement("div");
+        planet.classList.add("planet");
+
+        // Random position
+        const x = Math.random() * 100;
+        const y = Math.random() * 100;
+
+        // Random size
+        const size = 20 + Math.random() * 80;
+
+        // Random color
+        const colors = ["#ff4a9e", "#4affd9", "#ffb74a", "#9e4aff"];
+        const color = colors[Math.floor(Math.random() * colors.length)];
+
+        planet.style.left = `${x}%`;
+        planet.style.top = `${y}%`;
+        planet.style.width = `${size}px`;
+        planet.style.height = `${size}px`;
+        planet.style.backgroundColor = color;
+
+        document.body.appendChild(planet);
+      }
+
+      // Create multiple planets
+      for (let i = 0; i < 3; i++) {
+        createPlanet();
+      }
+
+      // Comet Animation
+      function createComet() {
+        const comet = document.createElement("div");
+        comet.classList.add("comet");
+
+        // Random starting position (off-screen to the left)
+        const startY = Math.random() * 100;
+
+        comet.style.left = "-10px";
+        comet.style.top = `${startY}%`;
+
+        document.body.appendChild(comet);
+
+        // Animate comet across the screen
+        const animation = comet.animate(
+          [
+            { transform: "translateX(0) translateY(0)", opacity: 1 },
+            {
+              transform: `translateX(110vw) translateY(${
+                Math.random() * 100 - 50
+              }px)`,
+              opacity: 0,
+            },
+          ],
+          {
+            duration: 3000 + Math.random() * 5000,
+            easing: "linear",
+          }
+        );
+
+        // Remove comet after animation completes
+        animation.onfinish = () => {
+          comet.remove();
+        };
+
+        // Create next comet after a random delay
+        setTimeout(createComet, 5000 + Math.random() * 10000);
+      }
+
+      // Start comet animation
+      createComet();
+
+      // Chatbot Functionality
+      const chatbotToggle = document.getElementById("chatbot-toggle");
+      const chatbotWindow = document.getElementById("chatbot-window");
+      const closeChatbot = document.getElementById("close-chatbot");
+      const chatbotBody = document.getElementById("chatbot-body");
+      const chatbotInput = document.getElementById("chatbot-input");
+      const chatbotSend = document.getElementById("chatbot-send");
+      const quickOptions = document.querySelectorAll(".quick-option");
+
+      chatbotToggle.addEventListener("click", () => {
+        chatbotWindow.style.display = "flex";
+      });
+
+      closeChatbot.addEventListener("click", () => {
+        chatbotWindow.style.display = "none";
+      });
+
+      function addBotMessage(message) {
+        const messageElement = document.createElement("div");
+        messageElement.classList.add("chat-message", "bot-message");
+        messageElement.textContent = message;
+        chatbotBody.appendChild(messageElement);
+        chatbotBody.scrollTop = chatbotBody.scrollHeight;
+      }
+
+      function addUserMessage(message) {
+        const messageElement = document.createElement("div");
+        messageElement.classList.add("chat-message", "user-message");
+        messageElement.textContent = message;
+        chatbotBody.appendChild(messageElement);
+        chatbotBody.scrollTop = chatbotBody.scrollHeight;
+      }
+
+      function handleUserInput(input) {
+        addUserMessage(input);
+
+        // Simple response logic
+        const lowerInput = input.toLowerCase();
+
+        if (lowerInput.includes("resume") || lowerInput.includes("download")) {
+          addBotMessage(
+            "I can help you download Haren's resume. Click the 'Download Resume' button on the website or use the quick option below."
+          );
+          addQuickOptions(["Download Resume", "View Projects", "Skills"]);
+        } else if (
+          lowerInput.includes("project") ||
+          lowerInput.includes("work")
+        ) {
+          addBotMessage(
+            "Haren has worked on several innovative projects including Plane Crash Investigation, Human Activity Recognition, and the patented Woman Safety Watch. You can view details in the Projects section."
+          );
+          addQuickOptions(["View Projects", "Download Resume", "Contact Info"]);
+        } else if (
+          lowerInput.includes("skill") ||
+          lowerInput.includes("technology")
+        ) {
+          addBotMessage(
+            "Haren is skilled in Python, Java, JavaScript, SQL, C++, React, Node.js, and Android development. Check out the Skills section for more details."
+          );
+          addQuickOptions([
+            "Skills & Technologies",
+            "Download Resume",
+            "View Projects",
+          ]);
+        } else if (
+          lowerInput.includes("contact") ||
+          lowerInput.includes("email") ||
+          lowerInput.includes("phone")
+        ) {
+          addBotMessage(
+            "You can contact Haren via email at pandyaharen4@gmail.com or phone at +91-6351102591. The Contact section has all the details."
+          );
+          addQuickOptions(["Contact Info", "Download Resume", "View Projects"]);
+        } else if (
+          lowerInput.includes("hello") ||
+          lowerInput.includes("hi") ||
+          lowerInput.includes("hey")
+        ) {
+          addBotMessage(
+            "Hello! I'm CosmoBot, your space-themed assistant. How can I help you today?"
+          );
+          addQuickOptions([
+            "Download Resume",
+            "View Projects",
+            "Skills & Technologies",
+            "Contact Info",
+          ]);
+        } else {
+          addBotMessage(
+            "I'm not sure how to help with that. Try asking about Haren's resume, projects, skills, or contact information."
+          );
+          addQuickOptions([
+            "Download Resume",
+            "View Projects",
+            "Skills & Technologies",
+            "Contact Info",
+          ]);
+        }
+      }
+
+      function addQuickOptions(options) {
+        // Remove existing quick options
+        const existingOptions = chatbotBody.querySelector(".quick-options");
+        if (existingOptions) {
+          existingOptions.remove();
+        }
+
+        // Create new quick options
+        const quickOptionsContainer = document.createElement("div");
+        quickOptionsContainer.classList.add("quick-options");
+
+        options.forEach((option) => {
+          const quickOption = document.createElement("div");
+          quickOption.classList.add("quick-option");
+          quickOption.textContent = option;
+          quickOption.addEventListener("click", () => {
+            handleUserInput(option);
+          });
+          quickOptionsContainer.appendChild(quickOption);
+        });
+
+        chatbotBody.appendChild(quickOptionsContainer);
+        chatbotBody.scrollTop = chatbotBody.scrollHeight;
+      }
+
+      chatbotSend.addEventListener("click", () => {
+        const input = chatbotInput.value.trim();
+        if (input) {
+          handleUserInput(input);
+          chatbotInput.value = "";
+        }
+      });
+
+      chatbotInput.addEventListener("keypress", (e) => {
+        if (e.key === "Enter") {
+          const input = chatbotInput.value.trim();
+          if (input) {
+            handleUserInput(input);
+            chatbotInput.value = "";
+          }
+        }
+      });
+
+      // Add event listeners to initial quick options
+      quickOptions.forEach((option) => {
+        option.addEventListener("click", () => {
+          const optionText = option.getAttribute("data-option");
+          handleUserInput(optionText);
+        });
+      });
+
+      // Resume Download Functionality
+      const downloadResumeBtn = document.getElementById("download-resume");
+
+      downloadResumeBtn.addEventListener("click", () => {
+        // Create a simple PDF using jsPDF
+        const { jsPDF } = window.jspdf;
+        const doc = new jsPDF();
+
+        // Add content to the PDF
+        doc.setFontSize(22);
+        doc.text("Haren P. Pandya", 20, 30);
+        doc.setFontSize(16);
+        doc.text("Computer Science Student & Innovator", 20, 45);
+
+        doc.setFontSize(14);
+        doc.text("Contact Information:", 20, 65);
+        doc.setFontSize(12);
+        doc.text("Email: pandyaharen4@gmail.com", 20, 75);
+        doc.text("Phone: +91-6351102591", 20, 85);
+        doc.text("Location:India", 20, 95);
+        doc.text("LinkedIn: linkedin.com/in/harenpandya04", 20, 105);
+
+        doc.setFontSize(14);
+        doc.text("Education:", 20, 125);
+        doc.setFontSize(12);
+        doc.text("Bachelor of Technology in Computer Science", 20, 135);
+        doc.text(
+          "R. N. G. Patel Institute of Technology | Aug 2023 – Jun 2026",
+          20,
+          145
+        );
+        doc.text("Diploma in Computer Engineering", 20, 160);
+        doc.text(
+          "Jayvantrai Harrai Desai Polytechnic | Completed 2022",
+          20,
+          170
+        );
+
+        doc.setFontSize(14);
+        doc.text("Skills:", 20, 190);
+        doc.setFontSize(12);
+        doc.text(
+          "Python, Java, JavaScript, SQL, C++, React, Node.js, Android",
+          20,
+          200
+        );
+
+        doc.setFontSize(14);
+        doc.text("Projects:", 20, 220);
+        doc.setFontSize(12);
+        doc.text(
+          "Plane Crash Investigation - Python, Data Analysis, Machine Learning",
+          20,
+          230
+        );
+        doc.text(
+          "Human Activity Recognition - TensorFlow, Deep Learning",
+          20,
+          240
+        );
+        doc.text("Woman Safety Watch - Arduino, IoT, Patent Granted", 20, 250);
+
+        // Save the PDF
+        doc.save("Haren_Pandya_Resume.pdf");
+      });
+
+      // Smooth scrolling for navigation links
+      document.querySelectorAll("nav a").forEach((anchor) => {
+        anchor.addEventListener("click", function (e) {
+          e.preventDefault();
+
+          const targetId = this.getAttribute("href");
+          const targetElement = document.querySelector(targetId);
+
+          window.scrollTo({
+            top: targetElement.offsetTop - 80,
+            behavior: "smooth",
+          });
+        });
+      });
+    </script>
+  </body>
+</html>
